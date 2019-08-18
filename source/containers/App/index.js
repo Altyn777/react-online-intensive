@@ -1,22 +1,22 @@
 // Core
 import React, { Component } from 'react';
+import { hot } from 'react-hot-loader'; // горячая перезагрузка модулей позволяет webpack обновлять приложение в браузере в живом режиме без перезагрузки страницы; состояние react компонентов будет сохраняться
 
+// Components
+import Feed from '../../components/Feed';
+
+// Instruments
+import avatar from '../../theme/assets/liliana.png';
+
+const options = {
+    avatar,
+    currentUserFirstName: 'Liliana',
+    currentUserLastName:  'Vess',
+};
+
+@hot(module)
 export default class App extends Component {
     render() {
-        return (
-            <h1
-                style = {{
-                    display:         'flex',
-                    justifyContent:  'center',
-                    alignItems:      'center',
-                    minHeight:       '100vh',
-                    backgroundColor: '#070A13',
-                    color:           'white',
-                    fontSize:        24,
-                    fontWeight:      '600',
-                }}>
-                Добро пожаловать!
-            </h1>
-        );
+        return <Feed { ...options }/>;
     }
 }
