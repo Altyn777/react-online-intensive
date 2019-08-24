@@ -7,7 +7,7 @@ import { Consumer } from '../HOC/withProfile';
 // Instruments
 import Styles from './styles.m.css';
 
-export default class Composer extends Component {
+export class Composer extends Component {
     render() {
         return (
             <Consumer>

@@ -7,7 +7,7 @@ import { Consumer } from '../HOC/withProfile';
 // Instruments
 import Styles from './styles.m.css';
 
-export default class StatusBar extends Component {
+export class StatusBar extends Component {
     render() {
         return (
             <Consumer>

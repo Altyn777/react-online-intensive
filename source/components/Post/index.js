@@ -8,7 +8,7 @@ import { Consumer } from '../HOC/withProfile';
 // Instruments
 import Styles from './styles.m.css';
 
-export default class Post extends Component {
+export class Post extends Component {
     render() {
         return (
             <Consumer>

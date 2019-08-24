@@ -6,6 +6,6 @@ import ReactDOM from 'react-dom';
 import './theme/init';
 
 // App
-import App from './containers/App';
+import { App } from './containers/App';
 
 ReactDOM.render(<App />, document.getElementById('app'));
