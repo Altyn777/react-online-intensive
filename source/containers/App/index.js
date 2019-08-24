@@ -15,13 +15,10 @@ const options = {
     currentUserLastName:  'Vess',
 };
 
-@hot(module)
-export class App extends Component {
-    render() {
-        return (
-            <Provider value = { options }>
-                <Feed />
-            </Provider>
-        );
-    }
-}
+export const App = hot(module)(() => {
+    return (
+        <Provider value = { options }>
+            <Feed />
+        </Provider>
+    );
+});

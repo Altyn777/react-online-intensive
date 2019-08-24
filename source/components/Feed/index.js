@@ -1,5 +1,5 @@
 // Core
-import React, { Component } from 'react';
+import React from 'react';
 
 // Components
 import * as Components from '../';
@@ -7,14 +7,12 @@ import * as Components from '../';
 // Instruments
 import Styles from './styles.m.css';
 
-export class Feed extends Component {
-    render() {
-        return (
-            <section className = { Styles.feed }>
-                <Components.StatusBar />
-                <Components.Composer />
-                <Components.Post />
-            </section>
-        );
-    }
-}
+export const Feed = () => {
+    return (
+        <section className = { Styles.feed }>
+            <Components.StatusBar />
+            <Components.Composer />
+            <Components.Post />
+        </section>
+    );
+};
