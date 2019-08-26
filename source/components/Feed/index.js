@@ -20,7 +20,7 @@ export default class Feed extends Component {
         this._createPost = this._createPost.bind(this);
         this._setPostsFetchingState = this._setPostsFetchingState.bind(this);
         this._likePost = this._likePost.bind(this);
-        // this._deletePost = this._deletePost.bind(this);
+        this._deletePost = this._deletePost.bind(this);
     }
 
     state = {
@@ -84,22 +84,17 @@ export default class Feed extends Component {
         });
     }
 
-    // _deletePost(id) { // метод класса; привязка его контекста выполнения в constructor
-    // this._setPostsFetchingState(true);
-    // await delay(1200);
-    //     const newPosts = this.state.posts.map(post => {
-    //          if (post.id === id) {
-    //             return {
-    //                 ...post,
-    //                     likes: [
-    //                         {
-    //                             id: getUniqueID(),
-    //                         }
-    //                     ]
-    //             }
-    //         }
-    //     })
-    // }
+    async _deletePost(id) { // метод класса; привязка его контекста выполнения в constructor
+        this._setPostsFetchingState(true);
+
+        await delay(1200);
+
+        const newPosts = this.state.posts.filter((post) => post.id !== id);
+        this.setState({
+            posts:           newPosts,
+            isPostsFetching: false,
+        });
+    }
 
     render() {
         const { posts, isPostsFetching } = this.state;
@@ -109,6 +104,7 @@ export default class Feed extends Component {
                 <Post
                     key = { post.id }
                     { ...post }
+                    _deletePost = { this._deletePost }
                     _likePost = { this._likePost }
                 />
             ); // возвращаем по экземлпяру компонента post
@@ -118,7 +114,7 @@ export default class Feed extends Component {
             <section className = { Styles.feed }>
                 <Spinner isSpinning = { isPostsFetching } />
                 <StatusBar />
-                <Composer _createPost = { this._createPost /*_deletePost = { this._deletePost }*/ } />
+                <Composer _createPost = { this._createPost } />
                 {postsJSX}
             </section>
         );
