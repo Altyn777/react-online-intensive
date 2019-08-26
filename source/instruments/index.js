@@ -8,8 +8,8 @@ export const sum = (operand1, operand2) => {
     return operand1 + operand2;
 };
 
-export const delay = (duration = 1000) => {
-    return new Promise((resolve) => {
+export const delay = (duration = 1000) => { // идентификатор delay, возвр Promise, кот перейдет в сост resolve спустя duration, мс
+    return new Promise((resolve) => { // привязываем стрелочную ф в виде значения
         setTimeout(resolve, duration);
     });
 };
