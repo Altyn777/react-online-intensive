@@ -16,10 +16,11 @@ export default class Feed extends Component {
             { id: '123', comment: 'Hi there!', created: 1526825076849 },
             { id: '456', comment: 'Привет!', created: 1526825076855 },
         ], // свойство, литерал массива
+        isPostsFetching: false,
     };
 
     render() {
-        const { posts } = this.state;
+        const { posts, isPostsFetching } = this.state;
 
         const postsJSX = posts.map((post) => { // экземпляр класса posts будет создан каждый раз при создании поста, рендерим список постов с пом. map
             return (
@@ -32,7 +33,7 @@ export default class Feed extends Component {
 
         return (
             <section className = { Styles.feed }>
-                <Spinner isSpinning />
+                <Spinner isSpinning = { isPostsFetching } />
                 <StatusBar />
                 <Composer />
                 {postsJSX}
