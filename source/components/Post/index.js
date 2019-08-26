@@ -26,6 +26,7 @@ export default class Post extends Component {
             <Consumer>
                 {(context) => (
                     <section className = { Styles.post }>
+                        <span className = { Styles.cross } />
                         <img
                             alt = 'profile picture'
                             src = { context.avatar }
