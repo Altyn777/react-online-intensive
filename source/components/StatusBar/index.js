@@ -14,7 +14,10 @@ export default class StatusBar extends Component {
                 {(context) => (
                     <section className = { Styles.statusBar }>
                         <button>
-                            <img src = { context.avatar } />
+                            <img
+                                alt = 'profile picture'
+                                src = { context.avatar }
+                            />
                             <span>{ context.currentUserFirstName }</span>
                             &nbsp;
                             <span>{ context.currentUserLastName }</span>

@@ -1,5 +1,6 @@
 // Core
 import React, {Component} from 'react';
+import moment from 'moment';
 
 // Components
 import StatusBar from '../StatusBar';
@@ -9,8 +10,16 @@ import Spinner from '../Spinner';
 
 // Instruments
 import Styles from './styles.m.css';
+import { getUniqueID } from '../../instruments';
 
 export default class Feed extends Component {
+    constructor () {
+        super();
+
+        this._createPost = this._createPost.bind(this);
+        // this._deletePost = this._deletePost.bind(this);
+    }
+
     state = {
         posts: [
             { id: '123', comment: 'Hi there!', created: 1526825076849 },
@@ -18,6 +27,25 @@ export default class Feed extends Component {
         ], // свойство, литерал массива
         isPostsFetching: false,
     };
+
+    // передадим компоненту Composer по props для получения значения тела поста
+    _createPost(comment) { // метод класса; привязка его контекста выполнения в constructor
+        const post = {
+            id:      getUniqueID(),
+            created: moment().utc(),
+            comment: comment,
+        };
+
+        this.setState(({posts}) => ({
+            posts: [ post, ...posts ],
+        }));
+    }
+
+    // _deletePost(id) { // метод класса; привязка его контекста выполнения в constructor
+    //     const post = {
+    //
+    //     }
+    // }
 
     render() {
         const { posts, isPostsFetching } = this.state;
@@ -35,7 +63,7 @@ export default class Feed extends Component {
             <section className = { Styles.feed }>
                 <Spinner isSpinning = { isPostsFetching } />
                 <StatusBar />
-                <Composer />
+                <Composer _createPost = { this._createPost /*_deletePost = { this._deletePost }*/ } />
                 {postsJSX}
             </section>
         );
