@@ -28,12 +28,12 @@ export default class Feed extends Component {
             { id: '123', comment: 'Hi there!', created: 1526825076849, likes: [] },
             { id: '456', comment: 'Привет!', created: 1526825076855, likes: [] },
         ], // свойство, литерал массива
-        isPostsFetching: false,
+        isSpinning: false,
     };
 
     _setPostsFetchingState (state) {
         this.setState({
-            isPostsFetching: state,
+            isSpinning: state,
         });
     }
 
@@ -51,7 +51,8 @@ export default class Feed extends Component {
 
         this.setState(({posts}) => ({
             posts:           [ post, ...posts ],
-            isPostsFetching: false,
+            isSpinning
+            : false,
         }));
     }
 
@@ -80,7 +81,7 @@ export default class Feed extends Component {
 
         this.setState({
             posts:           newPosts,
-            isPostsFetching: false,
+            isSpinning: false,
         });
     }
 
@@ -92,12 +93,12 @@ export default class Feed extends Component {
         const newPosts = this.state.posts.filter((post) => post.id !== id);
         this.setState({
             posts:           newPosts,
-            isPostsFetching: false,
+            isSpinning: false,
         });
     }
 
     render() {
-        const { posts, isPostsFetching } = this.state;
+        const { posts, isSpinning } = this.state;
 
         const postsJSX = posts.map((post) => { // экземпляр класса posts будет создан каждый раз при создании поста, рендерим список постов с пом. map
             return (
@@ -112,7 +113,7 @@ export default class Feed extends Component {
 
         return (
             <section className = { Styles.feed }>
-                <Spinner isSpinning = { isPostsFetching } />
+                <Spinner isSpinning = { isSpinning } />
                 <StatusBar />
                 <Composer _createPost = { this._createPost } />
                 {postsJSX}
