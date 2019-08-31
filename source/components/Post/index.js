@@ -17,21 +17,16 @@ export default class Post extends Component {
         created:     number.isRequired,
         id:          string.isRequired,
         likes:       array.isRequired,
-        _deletePost: func.isRequired,
+        _removePost: func.isRequired,
     };
 
-    constructor() {
-        super();
-        this._deletePost = this._deletePost.bind(this);
-    }
-
-    _deletePost() {
-        const { _deletePost, id } = this.props;
-        _deletePost(id);
-    }
+    _removePost = () => {
+        const { _removePost, id } = this.props;
+        _removePost(id);
+    };
 
     render() {
-        const { comment, created, _likePost, id, likes, _deletePost } = this.props;
+        const { comment, created, _likePost, id, likes } = this.props;
 
         return (
             <Consumer>
@@ -39,7 +34,7 @@ export default class Post extends Component {
                     <section className = { Styles.post }>
                         <span
                             className = { Styles.cross }
-                            onClick = { this._deletePost }
+                            onClick = { this._removePost }
                         />
                         <img
                             alt = 'profile picture'
@@ -53,7 +48,6 @@ export default class Post extends Component {
                             _likePost = { _likePost }
                             id = { id }
                             likes = { likes }
-                            { ...context }
                         />
                     </section>
                 )}
