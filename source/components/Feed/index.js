@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import { Transition } from 'react-transition-group';
 import { fromTo } from 'gsap';
+import { delay } from '../../instruments';
 
 // Components
 import Catcher from '../../components/Catcher';
@@ -20,8 +21,9 @@ import { socket } from '../../socket/init';
 @withProfile
 export default class Feed extends Component {
     state = {
-        posts:           [], // свойство, литерал массива
-        isPostsFetching: false,
+        posts:         [], // свойство, литерал массива
+        isSpinning:    false,
+        isPostmanShow: true,
     };
 
     componentDidMount() {
@@ -69,7 +71,7 @@ export default class Feed extends Component {
 
     _setPostsFetchingState = (state) => {
         this.setState({
-            isPostsFetching: state,
+            isSpinning: state,
         });
     };
 
@@ -84,7 +86,7 @@ export default class Feed extends Component {
 
         this.setState({
             posts,
-            isPostsFetching: false,
+            isSpinning: false,
         });
     };
 
@@ -104,8 +106,8 @@ export default class Feed extends Component {
         const { data: post } = await response.json();
 
         this.setState(({posts}) => ({
-            posts:           [ post, ...posts ],
-            isPostsFetching: false,
+            posts:      [ post, ...posts ],
+            isSpinning: false,
         }));
     };
 
@@ -122,8 +124,8 @@ export default class Feed extends Component {
          const { data: likedPost } = await response.json();
 
          this.setState(({posts}) => ({
-             posts:           posts.map((post) => post.id === likedPost.id ? likedPost : post),
-             isPostsFetching: false,
+             posts:      posts.map((post) => post.id === likedPost.id ? likedPost : post),
+             isSpinning: false,
          }));
      };
 
@@ -138,8 +140,8 @@ export default class Feed extends Component {
          });
 
          this.setState(({ posts }) => ({
-             posts:           posts.filter((post)=> post.id !== id),
-             isPostsFetching: false,
+             posts:      posts.filter((post)=> post.id !== id),
+             isSpinning: false,
          }));
      };
 
@@ -147,8 +149,21 @@ export default class Feed extends Component {
         fromTo(composer, 1, { opacity: 0, rotationX: 50 }, { opacity: 1, rotationX: 0 });
     };
 
+    _animatePostmanEnter = (postman) => {
+        fromTo(postman, 1, { x: 280 }, { x: 0 });
+    };
+
+    _animatePostmanExit = (postman) => {
+        fromTo(postman, 1, { x: 0 }, { x: 280 });
+    };
+
+    _animatePostmanEntered = async () => {
+        await delay(4000);
+        this.setState({ isPostmanShow: false });
+    };
+
     render() {
-        const { posts, isPostsFetching } = this.state;
+        const { posts, isSpinning } = this.state;
 
         const postsJSX = posts.map((post) => { // экземпляр класса posts будет создан каждый раз при создании поста, рендерим список постов с пом. map
             return (
@@ -164,7 +179,7 @@ export default class Feed extends Component {
 
         return (
             <section className = { Styles.feed }>
-                <Spinner isSpinning = { isPostsFetching } />
+                <Spinner isSpinning = { isSpinning } />
                 <StatusBar />
                 <Transition
                     appear
@@ -174,7 +189,15 @@ export default class Feed extends Component {
                     <Composer _createPost = { this._createPost } />
                 </Transition>
                 {postsJSX}
-                <Postman />
+                <Transition
+                    appear
+                    in = { this.state.isPostmanShow }
+                    timeout = { 4000 }
+                    onEnter = { this._animatePostmanEnter }
+                    onEntered = { this._animatePostmanEntered }
+                    onExit = { this._animatePostmanExit }>
+                    <Postman />
+                </Transition>
             </section>
         );
     }
