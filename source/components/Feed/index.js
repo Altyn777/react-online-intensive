@@ -45,11 +45,22 @@ export default class Feed extends Component {
                 }));
             }
         });
+
+        socket.on('like', (postJSON)=> {
+            const { data: likedPost, meta } = JSON.parse(postJSON);
+
+            if (`${currentUserFirstName} ${currentUserLastName}` !== `${meta.authorFirstName} ${meta.authorLastName}`) {
+                this.setState(({ posts }) => ({
+                    posts: posts.filter((post) => post.id !== likedPost.id),
+                }));
+            }
+        });
     }
 
     componentWillUnmount() {
         socket.removeListener('create');
         socket.removeListener('remove');
+        socket.removeListener('like');
     }
 
 
