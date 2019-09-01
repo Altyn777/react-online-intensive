@@ -1,5 +1,7 @@
 // Core
 import React, {Component} from 'react';
+import { Transition } from 'react-transition-group';
+import { fromTo } from 'gsap';
 
 // Components
 import Catcher from '../../components/Catcher';
@@ -8,6 +10,7 @@ import StatusBar from '../StatusBar';
 import Composer from '../Composer';
 import Post from '../Post';
 import Spinner from '../Spinner';
+import Postman from '../Postman';
 
 // Instruments
 import Styles from './styles.m.css';
@@ -140,28 +143,39 @@ export default class Feed extends Component {
          }));
      };
 
-     render() {
-         const { posts, isPostsFetching } = this.state;
+    _animateComposerEnter = (composer) => {
+        fromTo(composer, 1, { opacity: 0, rotationX: 50 }, { opacity: 1, rotationX: 0 });
+    };
 
-         const postsJSX = posts.map((post) => { // экземпляр класса posts будет создан каждый раз при создании поста, рендерим список постов с пом. map
-             return (
-                 <Catcher key = { post.id }>
-                     <Post
-                         { ...post }
-                         _likePost = { this._likePost }
-                         _removePost = { this._removePost }
-                     />
-                 </Catcher>
-             ); // возвращаем по экземлпяру компонента post
-         });
+    render() {
+        const { posts, isPostsFetching } = this.state;
 
-         return (
-             <section className = { Styles.feed }>
-                 <Spinner isSpinning = { isPostsFetching } />
-                 <StatusBar />
-                 <Composer _createPost = { this._createPost } />
-                 {postsJSX}
-             </section>
-         );
-     }
+        const postsJSX = posts.map((post) => { // экземпляр класса posts будет создан каждый раз при создании поста, рендерим список постов с пом. map
+            return (
+                <Catcher key = { post.id }>
+                    <Post
+                        { ...post }
+                        _likePost = { this._likePost }
+                        _removePost = { this._removePost }
+                    />
+                </Catcher>
+            ); // возвращаем по экземлпяру компонента post
+        });
+
+        return (
+            <section className = { Styles.feed }>
+                <Spinner isSpinning = { isPostsFetching } />
+                <StatusBar />
+                <Transition
+                    appear
+                    in
+                    timeout = { 1000 }
+                    onEnter = { this._animateComposerEnter }>
+                    <Composer _createPost = { this._createPost } />
+                </Transition>
+                {postsJSX}
+                <Postman />
+            </section>
+        );
+    }
 }
