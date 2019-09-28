@@ -1,5 +1,5 @@
 // Core
-import { sum, delay, getUniqueID } from './';
+import {sum, delay, getUniqueID, getFullApiUrl} from './';
 
 // jest.setTimeout(10000);
 
@@ -39,5 +39,21 @@ describe('instruments:', () => {
         expect(getUniqueID(5)).toHaveLength(5);
         expect(getUniqueID(13)).toHaveLength(13);
     });
-});
 
+    test('getFullApiUrl should be a func', () => {
+        expect(getFullApiUrl).toBeInstanceOf(Function);
+    });
+
+    test('getFullApiUrl should throw when 1 arg is not sting', () => {
+        expect(() => getFullApiUrl(4, 'abc')).toThrow();
+    });
+
+    test('getFullApiUrl should throw when 2 arg is not sting', () => {
+        expect(() => getFullApiUrl('abc', 4)).toThrow(); // теперь есть что коммитить
+    });
+
+    test('getFullApiUrl should return proper url', () => {
+        expect(getFullApiUrl('123', 'abc')).toBe('123/abc');
+        expect(getFullApiUrl('api', 'group_id')).toBe('api/group_id');
+    });
+});
