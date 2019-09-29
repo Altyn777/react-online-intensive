@@ -1,10 +1,7 @@
 // Core
 import React from 'react'; // для рендеринга
-import { mount, configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { mount } from 'enzyme';
 import { Composer } from './';
-
-configure({ adapter: new Adapter() });
 
 const props = {
     _createPost: jest.fn(),
@@ -16,7 +13,14 @@ const initialState = {
     comment: '',
 };
 
+const updatedState = {
+    comment,
+};
+
 const result = mount(<Composer { ...props } />); // mount - renderer enzyme, созд. репрезентацию компонента и тестир его в комплексновм виде
+
+const _submitCommentSpy = jest.spyOn(result.instance(), '_submitComment');
+const _handleFormSubmitSpy = jest.spyOn(result.instance(), '_handleFormSubmit');
 
 describe('composer component:', () => {
     test('should have 1 section element', () => {
@@ -45,5 +49,49 @@ describe('composer component:', () => {
 
     test('textarea value should be empty initially', () => {
         expect(result.find('textarea').text()).toBe('');
+    });
+
+    test('should respond to state  change property', () => {
+        result.setState({
+            comment,
+        });
+
+        expect(result.state()).toEqual(updatedState);
+        expect(result.find('textarea').text()).toBe(comment);
+
+        result.setState({
+            comment: '',
+        });
+
+        expect(result.state()).toEqual(initialState);
+        expect(result.find('textarea').text()).toBe('');
+    });
+
+    test('should handle textarea change event', () => {
+        result.find('textarea').simulate('change', {
+            target: {
+                value: comment,
+            },
+        });
+
+        expect(result.find('textarea').text()).toBe(comment);
+        expect(result.state()).toEqual(updatedState);
+    });
+
+    test('should handle form submit event', () => {
+        result.find('form').simulate('submit');
+
+        expect(result.state()).toEqual(initialState);
+    });
+
+    test('_createPost prop should be invoked once after form submission', () => {
+        // expect(props._createPost.mock.calls).toHaveLength(1);
+        // expect(props._createPost).toHaveBeenCalled();
+        expect(props._createPost).toHaveBeenCalledTimes(1);
+    });
+
+    test('spy class methods should be invoked once after form is submitted', () => {
+        expect(_submitCommentSpy).toHaveBeenCalledTimes(1);
+        expect(_handleFormSubmitSpy).toHaveBeenCalledTimes(1);
     });
 });
