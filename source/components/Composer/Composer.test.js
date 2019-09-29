@@ -38,4 +38,12 @@ describe('composer component:', () => {
     test('should have 1 input element', () => {
         expect(result.find('input')).toHaveLength(1);
     });
+
+    test('should have valid initial state', () => {
+        expect(result.state()).toEqual(initialState);
+    });
+
+    test('textarea value should be empty initially', () => {
+        expect(result.find('textarea').text()).toBe('');
+    });
 });
